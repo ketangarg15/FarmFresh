@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard - FarmFresh</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <%- include('../partials/flash') %>
+    
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <span class="dashboard-title-icon">🚜</span>
+                Farmer Dashboard
+            </h1>
+            <p class="dashboard-subtitle">Manage your farm products and orders</p>
+        </div>
+
+        <div class="dashboard-welcome">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h2>Welcome back, <%= user.name %>!</h2>
+                    <p>Here's what's happening with your farm today</p>
+                </div>
+                <div class="welcome-actions">
+                    <a href="/products/new" class="action-btn action-btn-primary">
+                        <span class="action-icon">➕</span>
+                        Add New Product
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-grid dashboard-grid-3">
+            <div class="dashboard-card stats-card">
+                <div class="card-icon primary">📦</div>
+                <span class="stats-number" id="totalListings">
+                    <%= typeof totalListings !== 'undefined' ? totalListings : 0 %>
+                </span>
+                <div class="stats-label">Total Listings</div>
+                <div class="stats-change positive">+12% this month</div>
+            </div>
+
+            <div class="dashboard-card stats-card">
+                <div class="card-icon warning">⏳</div>
+                <span class="stats-number" id="pendingOrders">
+                    <%= typeof pendingOrders !== 'undefined' ? pendingOrders : 0 %>
+                </span>
+                <div class="stats-label">Pending Orders</div>
+                <div class="stats-change">Needs attention</div>
+            </div>
+
+            <div class="dashboard-card stats-card">
+                <div class="card-icon success">💰</div>
+                <span class="stats-number">$2,450</span>
+                <div class="stats-label">This Month's Revenue</div>
+                <div class="stats-change positive">+8% from last month</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a href="/products" class="action-btn">
+                <span class="action-icon">📋</span>
+                View All Products
+            </a>
+            <a href="/orders" class="action-btn">
+                <span class="action-icon">📦</span>
+                Manage Orders
+            </a>
+            <a href="/analytics" class="action-btn">
+                <span class="action-icon">📊</span>
+                View Analytics
+            </a>
+            <a href="/profile" class="action-btn">
+                <span class="action-icon">⚙️</span>
+                Settings
+            </a>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card expandable">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon success">🥕</span>
+                        Recent Products
+                    </h3>
+                    <button class="card-expand-btn" aria-label="Expand card">▼</button>
+                </div>
+                <div class="card-content collapsed">
+                    <% if (typeof recentProducts !== 'undefined' && recentProducts.length > 0) { %>
+                        <ul class="dashboard-list">
+                            <% recentProducts.slice(0, 5).forEach(function(product) { %>
+                                <li class="dashboard-list-item">
+                                    <div class="list-item-content">
+                                        <div class="list-item-icon">🥬</div>
+                                        <div class="list-item-details">
+                                            <h4><%= product.name %></h4>
+                                            <p>$<%= product.price %> per <%= product.unit %> • 
+                                               <span class="status-badge <%= product.status %>"><%= product.status %></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <a href="/products/<%= product.id %>" class="list-item-action">View</a>
+                                </li>
+                            <% }); %>
+                        </ul>
+                        <% if (recentProducts.length > 5) { %>
+                            <p style="text-align: center; margin-top: 1rem; color: #718096;">
+                                And <%= recentProducts.length - 5 %> more products...
+                            </p>
+                        <% } %>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📦</div>
+                            <h3>No products yet</h3>
+                            <p>Start by adding your first product listing</p>
+                            <a href="/products/new" class="action-btn action-btn-primary">Add Product</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+            
+            <div class="dashboard-card expandable">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon info">📋</span>
+                        Recent Orders
+                        <% if (typeof pendingOrders !== 'undefined' && pendingOrders > 0) { %>
+                            <span class="notification-badge"><%= pendingOrders %></span>
+                        <% } %>
+                    </h3>
+                    <button class="card-expand-btn" aria-label="Expand card">▼</button>
+                </div>
+                <div class="card-content collapsed">
+                    <% if (typeof recentOrders !== 'undefined' && recentOrders.length > 0) { %>
+                        <ul class="dashboard-list">
+                            <% recentOrders.slice(0, 5).forEach(function(order) { %>
+                                <li class="dashboard-list-item">
+                                    <div class="list-item-content">
+                                        <div class="list-item-icon">🛒</div>
+                                        <div class="list-item-details">
+                                            <h4>Order #<%= order.id %></h4>
+                                            <p><%= order.customerName %> • $<%= order.total %> • 
+                                                <span class="status-badge <%= order.status %>"><%= order.status %></span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <a href="/orders/<%= order.id %>" class="list-item-action">View</a>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <h3>No orders yet</h3>
+                            <p>Orders will appear here when customers purchase your products</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon primary">📈</span>
+                        Sales Performance
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="chart-container">
+                        <p>Sales chart placeholder - integrate with Chart.js or similar</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <div class="progress-text">75% of monthly goal achieved</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../partials/footer') %>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

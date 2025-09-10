@@ -1,0 +1,27 @@
+<%# This single, dynamic block is cleaner and easier to maintain %>
+<% if (typeof messages !== 'undefined' && Object.keys(messages).length > 0) { %>
+    <div class="flash-container" id="flash-container">
+        <% 
+            // Helper object to map message categories to icons
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+        %>
+
+        <% Object.keys(messages).forEach(category => { %>
+            <% if (messages[category] && messages[category].length) { %>
+                <% messages[category].forEach(msg => { %>
+                    <div class="flash-message flash-<%= category %>" role="alert" aria-live="<%= category === 'error' ? 'assertive' : 'polite' %>">
+                        <span class="flash-icon"><%= icons[category] || '🔔' %></span>
+                        <span class="flash-text"><%= msg %></span>
+                        
+                        <button type="button" class="flash-close" aria-label="Dismiss message">×</button>
+                    </div>
+                <% }) %>
+            <% } %>
+        <% }) %>
+    </div>
+<% } %>

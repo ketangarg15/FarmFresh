@@ -1,0 +1,191 @@
+/* ==============================================
+   1. CSS Custom Properties (Variables)
+   ============================================== */
+:root {
+    --color-primary: #2f855a;
+    --color-primary-light: #d4edda;
+    --color-primary-bg: #f0fff4;
+    --color-button: #38a169;
+    --color-button-hover: #2f855a;
+    --color-text-light: #ffffff;
+
+    --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --radius-default: 6px;
+    --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ==============================================
+   2. General & Base Styles
+   ============================================== */
+body {
+    font-family: var(--font-family-sans);
+    margin: 0;
+    padding-top: 80px; /* Provide space for the sticky header */
+}
+
+a {
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ==============================================
+   3. Site Header & Navigation
+   ============================================== */
+.site-header {
+    background: var(--color-bg-light, white);
+    border-bottom: 2px solid var(--color-primary-light);
+    padding: 0 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-light);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 80px;
+}
+
+.navbar-brand .brand-text {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.navbar-nav,
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--color-primary);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-default);
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: var(--color-primary-light);
+}
+
+/* Add a clear focus state for keyboard accessibility */
+.nav-link:focus-visible,
+.btn-primary:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background: var(--color-button);
+    color: var(--color-text-light);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-default);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background: var(--color-button-hover);
+}
+
+/* Mobile Navigation Toggle (Hamburger Menu) */
+.nav-toggle {
+    display: none;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+.nav-toggle .icon-bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--color-primary);
+    margin: 5px 0;
+    transition: transform 0.3s ease;
+}
+
+/* ==============================================
+   4. Flash Messages (Non-blocking)
+   ============================================== */
+.flash-container {
+    position: fixed;
+    top: 100px; /* Position below the sticky header */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 600px;
+    z-index: 2000;
+}
+
+.flash-message {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-default);
+    font-weight: 500;
+    margin-bottom: 1rem;
+    transition: opacity 0.5s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    animation: slideInDown 0.4s ease-out;
+}
+.flash-message.fade-out {
+    opacity: 0;
+}
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Other flash message styles (.flash-success, .flash-error, etc.) remain the same */
+
+/* ==============================================
+   5. Footer
+   ============================================== */
+.site-footer {
+    background: var(--color-primary-bg);
+    border-top: 2px solid var(--color-primary-light);
+    padding: 3rem 1rem;
+    color: var(--color-primary);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+}
+
+/* Other footer styles remain the same */
+
+/* ==============================================
+   6. Responsive Design for Navigation
+   ============================================== */
+@media (max-width: 768px) {
+    .navbar-nav,
+    .navbar-actions {
+        display: none; /* Hide links on mobile */
+    }
+
+    .nav-toggle {
+        display: block; /* Show hamburger icon */
+    }
+}

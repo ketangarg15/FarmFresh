@@ -1,0 +1,101 @@
+:root {
+    --color-primary: #2d5016;
+    --color-primary-bg: #f0fff4;
+    --color-accent: #ff6b35;
+    --color-text-dark: #333;
+    --shadow-card: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.about-hero {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/images/hero-background.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    padding: 5rem 1rem;
+}
+
+.about-hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.about-hero-subtitle {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+.about-main {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+}
+
+.about-section {
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+}
+
+.about-mission {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.mission-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow-card);
+}
+
+.mission-text h2 {
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.step-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+}
+
+.step-icon {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.cta-section {
+    text-align: center;
+    background: var(--color-primary-bg);
+    padding: 3rem 1rem;
+    border-radius: 10px;
+}
+
+.cta-buttons {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}

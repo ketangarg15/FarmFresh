@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= product.name %> - FarmFresh</title>
+    <link rel="stylesheet" href="/css/products-show.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <%- include('../partials/flash') %>
+
+    <div class="product-page">
+        <div class="product-details">
+            <div class="product-images">
+                <div class="product-main-image-container">
+                    <img 
+                        src="<%= product.image.url %>" 
+                        alt="<%= product.name %>" 
+                        id="mainProductImage" 
+                        class="product-main-image"
+                    />
+                </div>
+                
+                <% if (product.images && product.images.length > 0) { %>
+                    <div class="product-thumbnails" id="productThumbnails">
+                        <% product.images.forEach(function(img, idx) { %>
+                            <img 
+                                src="<%= img.url %>" 
+                                alt="Thumbnail <%= idx + 1 %>" 
+                                class="thumbnail" 
+                                data-src="<%= img.url %>" />
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="product-info">
+                <h1 class="product-title"><%= product.name %></h1>
+                
+                <p class="price">
+                    ₹<%= Number(product.price).toFixed(2) %>
+                </p>
+                <p class="category">
+                    Category: <%= product.category || 'Uncategorized' %>
+                </p>
+                
+                <div class="description">
+                    <%- product.description || 'No description provided.' %>
+                </div>
+                
+                <% if (product.farmer) { %>
+                    <p class="farmer">
+                        Sold by: <a href="/farmers/<%= product.farmer._id %>"><%= product.farmer.username %></a>
+                    </p>
+                <% } %>
+                
+                <div class="product-actions">
+                    <form action="/orders" method="POST">
+                        <input type="hidden" name="productId" value="<%= product._id %>" />
+                        <div class="quantity-control">
+                            <label for="quantity">Quantity:</label>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="<%= product.quantity %>" class="quantity-input">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <% if (typeof relatedProducts !== 'undefined' && relatedProducts.length > 0) { %>
+            <section class="related-products">
+                <h2>Related Products</h2>
+                <div class="related-grid">
+                    <% relatedProducts.forEach(function(rp) { %>
+                        <div class="related-card">
+                            <a href="/products/<%= rp._id %>">
+                                <img src="<%= rp.image.url %>" alt="<%= rp.name %>" class="related-image" />
+                                <p><%= rp.name %></p>
+                                <p class="price">₹<%= Number(rp.price).toFixed(2) %></p>
+                            </a>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+
+        <% if (product.reviews && product.reviews.length > 0) { %>
+            <section class="reviews">
+                <h2>Customer Reviews</h2>
+                <% product.reviews.forEach(function(review) { %>
+                    <div class="review">
+                        <p><strong><%= review.author.username %>:</strong> <%- review.body %></p>
+                    </div>
+                <% }) %>
+            </section>
+        <% } %>
+    </div>
+    
+    <%- include('../partials/footer') %>
+    <script src="/js/product-show.js"></script> </body>
+</html>

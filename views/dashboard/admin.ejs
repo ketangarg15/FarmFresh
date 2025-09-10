@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - FarmFresh</title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <%- include('../partials/flash') %>
+
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <span class="dashboard-title-icon">⚙️</span>
+                Admin Dashboard
+            </h1>
+            <p class="dashboard-subtitle">System overview and management</p>
+        </div>
+
+        <div class="dashboard-welcome">
+            <div class="welcome-content">
+                <div class="welcome-text">
+                    <h2>Welcome, <%= user.name %></h2>
+                    <p>Monitor and manage the FarmFresh platform</p>
+                </div>
+                <div class="welcome-actions">
+                    <a href="/admin/users" class="action-btn action-btn-primary">
+                        <span class="action-icon">👥</span>
+                        Manage Users
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid dashboard-grid-4">
+            <div class="dashboard-card stats-card">
+                <div class="card-icon primary">👥</div>
+                <span class="stats-number" id="totalUsers">
+                    <%= typeof totalUsers !== 'undefined' ? totalUsers : 0 %>
+                </span>
+                <div class="stats-label">Total Users</div>
+                <div class="stats-change positive">+15% this month</div>
+            </div>
+
+            <div class="dashboard-card stats-card">
+                <div class="card-icon success">📦</div>
+                <span class="stats-number" id="totalOrders">
+                    <%= typeof totalOrders !== 'undefined' ? totalOrders : 0 %>
+                </span>
+                <div class="stats-label">Total Orders</div>
+                <div class="stats-change positive">+8% this week</div>
+            </div>
+
+            <div class="dashboard-card stats-card">
+                <div class="card-icon warning">⚠️</div>
+                <span class="stats-number" id="pendingDisputes">
+                    <%= typeof pendingDisputes !== 'undefined' ? pendingDisputes : 0 %>
+                </span>
+                <div class="stats-label">Pending Disputes</div>
+                <div class="stats-change">Needs attention</div>
+            </div>
+
+            <div class="dashboard-card stats-card">
+                <div class="card-icon info">💰</div>
+                <span class="stats-number">$12,450</span>
+                <div class="stats-label">Platform Revenue</div>
+                <div class="stats-change positive">+22% this month</div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <a href="/admin/users" class="action-btn">
+                <span class="action-icon">👥</span>
+                Manage Users
+            </a>
+            <a href="/admin/orders" class="action-btn">
+                <span class="action-icon">📦</span>
+                View Orders
+            </a>
+            <a href="/admin/disputes" class="action-btn">
+                <span class="action-icon">⚖️</span>
+                Handle Disputes
+            </a>
+            <a href="/admin/deliveries" class="action-btn">
+                <span class="action-icon">🚚</span>
+                Manage Deliveries
+            </a>
+            <a href="/admin/analytics" class="action-btn">
+                <span class="action-icon">📊</span>
+                Analytics
+            </a>
+            <a href="/admin/settings" class="action-btn">
+                <span class="action-icon">⚙️</span>
+                System Settings
+            </a>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-card expandable">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon info">📋</span>
+                        Recent Activity
+                    </h3>
+                    <button class="card-expand-btn" aria-label="Expand card">▼</button>
+                </div>
+                <div class="card-content collapsed">
+                    <% if (typeof recentActivity !== 'undefined' && recentActivity.length > 0) { %>
+                        <ul class="dashboard-list">
+                            <% recentActivity.slice(0, 8).forEach(function(activity) { %>
+                                <li class="dashboard-list-item">
+                                    <div class="list-item-content">
+                                        <div class="list-item-icon">
+                                            <%= activity.type === 'user_registered' ? '👤' : 
+                                               activity.type === 'order_placed' ? '📦' : 
+                                               activity.type === 'dispute_created' ? '⚠️' : 
+                                               activity.type === 'payment_processed' ? '💳' : '📋' %>
+                                        </div>
+                                        <div class="list-item-details">
+                                            <h4><%= activity.title %></h4>
+                                            <p><%= activity.description %> • 
+                                                <span data-timestamp="<%= activity.timestamp %>">
+                                                    <%= activity.timeAgo %>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <% if (activity.actionUrl) { %>
+                                        <a href="<%= activity.actionUrl %>" class="list-item-action">View</a>
+                                    <% } %>
+                                </li>
+                            <% }); %>
+                        </ul>
+                    <% } else { %>
+                        <div class="empty-state">
+                            <div class="empty-state-icon">📋</div>
+                            <h3>No recent activity</h3>
+                            <p>System activity will appear here</p>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon success">💚</span>
+                        System Health
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Server Performance</span>
+                            <span>95%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>Database Health</span>
+                            <span>98%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 98%;"></div>
+                        </div>
+                    </div>
+                
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>API Response Time</span>
+                            <span>120ms</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+              
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon primary">📈</span>
+                        User Growth
+                    </h3>
+                </div>
+                <div class="card-content">
+                    <div class="chart-container">
+                        <p>User growth chart placeholder - integrate with Chart.js or similar</p>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 600; color: #667eea;">
+                                <%= typeof totalUsers !== 'undefined' ? Math.floor(totalUsers * 0.6) : 0 %>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #718096;">Farmers</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 1.5rem; font-weight: 600; color: #48bb78;">
+                                <%= typeof totalUsers !== 'undefined' ? Math.floor(totalUsers * 0.4) : 0 %>
+                            </div>
+                            <div style="font-size: 0.85rem; color: #718096;">Consumers</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card expandable">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <span class="card-icon warning">⚡</span>
+                        Pending Actions
+                        <% if (typeof pendingDisputes !== 'undefined' && pendingDisputes > 0) { %>
+                            <span class="notification-badge"><%= pendingDisputes %></span>
+                        <% } %>
+                    </h3>
+                    <button class="card-expand-btn" aria-label="Expand card">▼</button>
+                </div>
+                <div class="card-content collapsed">
+                    <ul class="dashboard-list">
+                        <% if (typeof pendingDisputes !== 'undefined' && pendingDisputes > 0) { %>
+                            <li class="dashboard-list-item">
+                                <div class="list-item-content">
+                                    <div class="list-item-icon">⚖️</div>
+                                    <div class="list-item-details">
+                                        <h4>Dispute Resolution</h4>
+                                        <p><%= pendingDisputes %> disputes need admin review</p>
+                                    </div>
+                                </div>
+                                <a href="/admin/disputes" class="list-item-action">Review</a>
+                            </li>
+                        <% } %>
+                        
+                        <li class="dashboard-list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-icon">👤</div>
+                                <div class="list-item-details">
+                                    <h4>User Verification</h4>
+                                    <p>3 farmers pending verification</p>
+                                </div>
+                            </div>
+                            <a href="/admin/users?status=pending" class="list-item-action">Review</a>
+                        </li>
+                        
+                        <li class="dashboard-list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-icon">📦</div>
+                                <div class="list-item-details">
+                                    <h4>Product Moderation</h4>
+                                    <p>5 products need approval</p>
+                                </div>
+                            </div>
+                            <a href="/admin/products?status=pending" class="list-item-action">Review</a>
+                        </li>
+                        
+                        <li class="dashboard-list-item">
+                            <div class="list-item-content">
+                                <div class="list-item-icon">🚚</div>
+                                <div class="list-item-details">
+                                    <h4>Delivery Issues</h4>
+                                    <p>2 delivery problems reported</p>
+                                </div>
+                            </div>
+                            <a href="/admin/deliveries?status=issues" class="list-item-action">Review</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <%- include('../partials/footer') %>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

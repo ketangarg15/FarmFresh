@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Our Farmers - FarmFresh</title>
+    <link rel="stylesheet" href="/css/farmers.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <%- include('partials/flash') %>
+
+    <div class="farmers-container">
+        <main class="farmers-main">
+            <div class="farmers-header">
+                <h1 class="farmers-title">Meet Our Farmers</h1>
+                <p class="farmers-subtitle">The dedicated individuals bringing fresh, local food to your table.</p>
+            </div>
+
+            <div class="farmers-grid">
+                <% if (farmers && farmers.length > 0) { %>
+                    <% farmers.forEach(farmer => { %>
+                        <div class="farmer-card">
+                            <div class="farmer-card-image">
+                                <img src="<%= farmer.profileImage ? farmer.profileImage.url : '/images/avatar-placeholder.png' %>" alt="<%= farmer.name %>">
+                            </div>
+                            <div class="farmer-card-content">
+                                <h3 class="farmer-name"><%= farmer.name %></h3>
+                                <p class="farm-name"><%= farmer.farmName || 'Local Farm' %></p>
+                                <p class="farmer-location">📍 <%= farmer.location || 'Community Grown' %></p>
+                                <p class="farmer-bio"><%= farmer.bio ? farmer.bio.substring(0, 100) + '...' : 'Passionate about sustainable, fresh farming.' %></p>
+                                <a href="/farmers/<%= farmer._id %>" class="btn btn-primary">View Profile</a>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <div class="empty-state">
+                        <h2>No Farmers Found</h2>
+                        <p>We are always growing! Check back soon to meet new farmers in our community.</p>
+                    </div>
+                <% } %>
+            </div>
+        </main>
+    </div>
+
+    <%- include('partials/footer') %>
+</body>
+</html>

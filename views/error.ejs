@@ -1,0 +1,18 @@
+<%- include('partials/header') %>
+<%- include('partials/flash') %>
+
+<div class="error-container">
+    <h1 class="error-title">Error <%= err.statusCode || 500 %></h1>
+    <p class="error-message"><%= err.message || 'Sorry, something went wrong on our end.' %></p>
+
+    <% if (process.env.NODE_ENV !== 'production' && err.stack) { %>
+        <div class="stack-trace">
+            <h3>Developer Stack Trace</h3>
+            <pre><%= err.stack %></pre>
+        </div>
+    <% } %>
+
+    <a href="/" class="error-link">Go back to the Homepage</a>
+</div>
+
+<%- include('partials/footer') %>

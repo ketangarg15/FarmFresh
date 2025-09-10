@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - FarmFresh</title>
+    <link rel="stylesheet" href="/css/products.css">
+</head>
+<body>
+    <%- include('../partials/header') %>
+    <%- include('../partials/flash') %>
+
+    <div class="products-container">
+        <main class="products-main">
+            <div class="products-content">
+                <div class="products-title-section">
+                    <h2 class="products-title">Fresh Products</h2>
+                    <p class="products-subtitle">Discover the finest organic produce from local farmers</p>
+                </div>
+
+                <div class="products-filters">
+                    <form class="products-search-form" method="GET" action="/products">
+                        <div class="products-search-group">
+                            <input
+                                type="text"
+                                name="q"
+                                class="products-search-input"
+                                placeholder="Search products..."
+                                value="<%= typeof query !== 'undefined' ? query : '' %>"
+                                id="searchInput"
+                            >
+                            <button type="submit" class="products-search-btn" aria-label="Search">🔍</button>
+                        </div>
+                        
+                        <div class="products-filter-group">
+                            <select name="category" class="products-category-select" id="categoryFilter">
+                                <option value="">All Categories</option>
+                                <option value="vegetable" <%= typeof category !== 'undefined' && category === 'vegetable' ? 'selected' : '' %>>Vegetables</option>
+                                <option value="fruit" <%= typeof category !== 'undefined' && category === 'fruit' ? 'selected' : '' %>>Fruits</option>
+                                </select>
+                            
+                            <select name="sort" class="products-sort-select">
+                                <option value="">Sort By</option>
+                                <option value="price-low" <%= typeof sort !== 'undefined' && sort === 'price-low' ? 'selected' : '' %>>Price: Low to High</option>
+                                <option value="price-high" <%= typeof sort !== 'undefined' && sort === 'price-high' ? 'selected' : '' %>>Price: High to Low</option>
+                                </select>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="products-grid" id="productsGrid">
+                    <% if (typeof products !== 'undefined' && products.length > 0) { %>
+                        <% products.forEach(function(product) { %>
+                            <div class="products-card" data-category="<%= product.category || '' %>" data-name="<%= product.name.toLowerCase() %>">
+                                <div class="products-card-image">
+                                    <img
+                                        src="<%= product.image ? product.image.url : '/images/placeholder-product.jpg' %>"
+                                        alt="<%= product.name %>"
+                                        class="products-img"
+                                        loading="lazy"
+                                    >
+                                    <% if (typeof product.quantity !== 'undefined' && product.quantity <= 5) { %>
+                                        <div class="products-stock-badge">
+                                            <% if (product.quantity === 0) { %>
+                                                Out of Stock
+                                            <% } else { %>
+                                                Only <%= product.quantity %> left
+                                            <% } %>
+                                        </div>
+                                    <% } %>
+                                </div>
+                                
+                                <div class="products-card-content">
+                                    <h3 class="products-card-title"><%= product.name %></h3>
+                                    <p class="products-card-farmer">
+                                        By <span class="products-farmer-name"><%= (product.farmer && product.farmer.name) || 'Local Farmer' %></span>
+                                    </p>
+                                    <div class="products-card-price">
+                                        $<%= product.price.toFixed(2) %>
+                                        <% if (product.unit) { %>
+                                            <span class="products-price-unit">per <%= product.unit %></span>
+                                        <% } %>
+                                    </div>
+                                    
+                                    <div class="products-card-actions">
+                                        <a href="/products/<%= product._id %>" class="products-btn products-btn-view">View Details</a>
+                                        
+                                        <% if (product.quantity > 0) { %>
+                                            <form method="POST" action="/orders" class="products-order-form">
+                                                <input type="hidden" name="productId" value="<%= product._id %>">
+                                                <input type="hidden" name="quantity" value="1">
+                                                <button type="submit" class="products-btn products-btn-order">Add to Cart</button>
+                                            </form>
+                                        <% } else { %>
+                                            <button class="products-btn products-btn-disabled" disabled>Out of Stock</button>
+                                        <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        <% }); %>
+                    <% } else { %>
+                        <div class="products-empty">
+                            <div class="products-empty-content">
+                                <h3>No products found</h3>
+                                <p>Try adjusting your search or filter criteria.</p>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
+                </div>
+        </main>
+        <%- include('../partials/footer') %>
+    </div>
+    <script src="/js/products.js"></script>
+</body>
+</html>

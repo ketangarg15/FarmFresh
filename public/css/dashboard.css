@@ -1,0 +1,173 @@
+/* public/css/dashboard.css */
+
+/* ==============================================
+   1. CSS Custom Properties (Variables)
+   ============================================== */
+:root {
+    /* Light Mode Colors */
+    --bg-body-light: #f0fff4;
+    --bg-card-light: #ffffff;
+    --text-dark-light: #1a202c;
+    --text-medium-light: #2d3748;
+    --text-light-light: #718096;
+    --border-light: #e2e8f0;
+
+    /* Dark Mode Colors */
+    --bg-body-dark: #1a202c;
+    --bg-card-dark: #2d3748;
+    --text-dark-dark: #f7fafc;
+    --text-medium-dark: #e2e8f0;
+    --text-light-dark: #a0aec0;
+    --border-dark: #4a5568;
+
+    /* Theme Colors */
+    --primary-gradient: linear-gradient(135deg, #38a169 0%, #2f855a 100%);
+    --primary-color: #38a169;
+    --text-on-primary: #ffffff;
+
+    /* Sizing & Shadows */
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --shadow-card: 0 4px_20px rgba(0, 0, 0, 0.07);
+    --shadow-hover: 0 8px 25px rgba(56, 161, 105, 0.2);
+}
+
+/* ==============================================
+   2. Base & Dark Mode Setup
+   ============================================== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    background: var(--bg-body-light);
+    color: var(--text-medium-light);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Apply dark mode variables if the user prefers it */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: var(--bg-body-dark);
+        color: var(--text-medium-dark);
+    }
+}
+
+/* ==============================================
+   3. Layout & Header
+   ============================================== */
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.dashboard-header {
+    margin-bottom: 2.5rem;
+}
+
+.dashboard-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-dark-light);
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    .dashboard-title { color: var(--text-dark-dark); }
+    .dashboard-subtitle { color: var(--text-light-dark); }
+}
+
+/* ==============================================
+   4. Dashboard Cards
+   ============================================== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.dashboard-card {
+    background: var(--bg-card-light);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+    border: 1px solid var(--border-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+.card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark-light);
+}
+
+@media (prefers-color-scheme: dark) {
+    .dashboard-card {
+        background: var(--bg-card-dark);
+        border-color: var(--border-dark);
+    }
+    .card-title { color: var(--text-dark-dark); }
+}
+
+/* ==============================================
+   5. Action Buttons
+   ============================================== */
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 1.2rem;
+    background: var(--bg-card-light);
+    border: 2px solid var(--border-light);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--text-medium-light);
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    border-color: var(--primary-color);
+    background: var(--primary-color);
+    color: var(--text-on-primary);
+    transform: translateY(-2px);
+}
+
+.action-btn.action-btn-primary {
+    background: var(--primary-gradient);
+    color: var(--text-on-primary);
+    border-color: transparent;
+}
+
+/* Add a clear focus state for keyboard accessibility */
+.action-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    .action-btn {
+        background: var(--bg-card-dark);
+        border-color: var(--border-dark);
+        color: var(--text-medium-dark);
+    }
+}
+
+/* Status Badges, Welcome Banner, and other specific styles would follow a similar pattern */

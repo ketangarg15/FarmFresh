@@ -1,0 +1,247 @@
+/* ==============================================
+   1. CSS Custom Properties (Variables)
+   ============================================== */
+:root {
+    /* Color Palette */
+    --color-primary: #2d5016;
+    --color-primary-dark: #1a2f0a;
+    --color-primary-bg: #e8f5e8;
+    --color-text-dark: #333333;
+    --color-text-light: #666666;
+    --color-text-inverse: #ffffff;
+    --color-border: #e9ecef;
+    --color-bg-light: #f8f9fa;
+    --color-bg-card: #ffffff;
+    --color-accent-info: #17a2b8;
+    --color-accent-warning: #ffc107;
+    --color-accent-danger: #dc3545;
+    --color-accent-success: #28a745;
+
+    /* Sizing & Spacing */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+
+    /* Effects */
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-focus: 0 0 0 3px rgba(45, 80, 22, 0.15);
+}
+
+/* ==============================================
+   2. Base & Layout Styles
+   ============================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--color-text-dark);
+    background-color: var(--color-bg-light);
+}
+
+.deliveries-container,
+.delivery-show-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.deliveries-main,
+.delivery-show-main {
+    flex: 1;
+    padding: var(--spacing-xl);
+}
+
+.deliveries-content,
+.delivery-show-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+/* ==============================================
+   3. Header & Navigation
+   ============================================== */
+.deliveries-header {
+    background: var(--color-bg-card);
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.deliveries-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-xl);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.deliveries-nav-brand h1 {
+    color: var(--color-primary);
+    font-size: 1.5rem;
+}
+
+.deliveries-nav-links {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-md);
+}
+
+.deliveries-nav-link {
+    text-decoration: none;
+    color: var(--color-text-dark);
+    font-weight: 500;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 20px;
+}
+
+.deliveries-nav-link:hover,
+.deliveries-nav-link.active {
+    color: var(--color-primary);
+    background: var(--color-primary-bg);
+}
+
+/* ==============================================
+   4. Page Sections (Headers, Cards, etc.)
+   ============================================== */
+.page-section {
+    background: var(--color-bg-card);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: var(--spacing-xl);
+    border: 1px solid var(--color-border);
+}
+
+.page-title {
+    color: var(--color-primary);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* ==============================================
+   5. Buttons & Controls
+   ============================================== */
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+}
+.btn-primary:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: var(--color-text-inverse);
+}
+.btn-secondary:hover:not(:disabled) {
+    background: #5a6268;
+}
+
+/* ==============================================
+   6. Table & Card Views
+   ============================================== */
+.deliveries-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.deliveries-table th,
+.deliveries-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.deliveries-table th {
+    background: var(--color-bg-light);
+    font-weight: 600;
+}
+
+.delivery-row:hover {
+    background: var(--color-bg-light);
+}
+
+.deliveries-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+/* ==============================================
+   7. Accessibility & Responsive Design
+   ============================================== */
+/* Modern focus state for keyboard users */
+.btn:focus-visible,
+.filter-select:focus-visible,
+.filter-input:focus-visible,
+.form-select:focus-visible,
+.form-input:focus-visible,
+.form-textarea:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    box-shadow: var(--shadow-focus);
+}
+
+/* Universal selector for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .deliveries-header, .deliveries-footer, .page-header-actions, .deliveries-filters, .table-actions, .action-buttons {
+        display: none !important;
+    }
+    .page-section, .deliveries-table-container {
+        box-shadow: none;
+        border: 1px solid var(--color-text-dark);
+    }
+}
+
+/* Add your existing mobile responsive styles below, replacing hardcoded values with variables */
+@media (max-width: 768px) {
+    .deliveries-main, .delivery-show-main {
+        padding: var(--spacing-md);
+    }
+    .page-section {
+        padding: var(--spacing-lg);
+    }
+    /* ...etc */
+}

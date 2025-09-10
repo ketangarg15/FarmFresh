@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - FarmFresh</title>
+    <link rel="stylesheet" href="/css/orders.css">
+</head>
+<body>
+    <div class="orders-container">
+        <header class="orders-header">
+            <%- include('../partials/header') %>
+        </header>
+
+        <div class="orders-breadcrumb">
+            <div class="orders-breadcrumb-content">
+                <a href="/" class="orders-breadcrumb-link">Home</a>
+                <span class="orders-breadcrumb-separator">›</span>
+                <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+                    <a href="/dashboard/<%= currentUser.role %>" class="orders-breadcrumb-link">Dashboard</a>
+                    <span class="orders-breadcrumb-separator">›</span>
+                <% } %>
+                <span class="orders-breadcrumb-current">My Orders</span>
+            </div>
+        </div>
+
+        <main class="orders-main">
+            <div class="orders-content">
+                <div class="orders-page-header">
+                    <div class="orders-title-section">
+                        <h1 class="orders-title">My Orders</h1>
+                        <p class="orders-subtitle">Track and manage all your past and current orders.</p>
+                    </div>
+                    
+                    <div class="orders-stats">
+                        <div class="orders-stat-card">
+                            <span class="orders-stat-number" id="totalOrders">
+                                <%= typeof orders !== 'undefined' ? orders.length : 0 %>
+                            </span>
+                            <span class="orders-stat-label">Total Orders</span>
+                        </div>
+                        <div class="orders-stat-card">
+                            <span class="orders-stat-number" id="pendingOrders">
+                                <%= typeof orders !== 'undefined' ? orders.filter(order => order.status === 'pending').length : 0 %>
+                            </span>
+                            <span class="orders-stat-label">Pending</span>
+                        </div>
+                        <div class="orders-stat-card">
+                            <span class="orders-stat-number" id="deliveredOrders">
+                                <%= typeof orders !== 'undefined' ? orders.filter(order => order.status === 'delivered').length : 0 %>
+                            </span>
+                            <span class="orders-stat-label">Delivered</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="orders-filters">
+                    <div class="orders-filter-group">
+                        <label for="statusFilter" class="orders-filter-label">Filter by Status:</label>
+                        <select id="statusFilter" class="orders-filter-select">
+                            <option value="all">All Orders</option>
+                            <option value="pending">Pending</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="dispatched">Dispatched</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    
+                    <div class="orders-filter-group">
+                        <label for="sortFilter" class="orders-filter-label">Sort by:</label>
+                        <select id="sortFilter" class="orders-filter-select">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="amount-high">Highest Amount</option>
+                            <option value="amount-low">Lowest Amount</option>
+                        </select>
+                    </div>
+                    
+                    <div class="orders-filter-actions">
+                        <button type="button" class="orders-filter-btn" id="clearFilters">
+                            Clear Filters
+                        </button>
+                    </div>
+                </div>
+
+                <div class="orders-list-container">
+                    <% if (typeof orders !== 'undefined' && orders.length > 0) { %>
+                        <div class="orders-list" id="ordersList">
+                            <% orders.forEach(function(order) { %>
+                                <div class="orders-item" 
+                                     data-order-id="<%= order._id || order.id %>"
+                                     data-status="<%= order.status || 'pending' %>" 
+                                     data-amount="<%= order.totalAmount || 0 %>" 
+                                     data-date="<%= order.createdAt || new Date() %>">
+                                    
+                                    <div class="orders-item-header">
+                                        <div class="orders-item-main">
+                                            <div class="orders-item-id">
+                                                <a href="/orders/<%= order._id || order.id %>" class="orders-item-link">
+                                                    Order #<%= (order._id || order.id || '').toString().slice(-8).toUpperCase() %>
+                                                </a>
+                                            </div>
+                                            <div class="orders-item-status">
+                                                <span class="orders-status-badge orders-status-<%= (order.status || 'pending').toLowerCase() %>">
+                                                    <%= (order.status || 'Pending').charAt(0).toUpperCase() + (order.status || 'pending').slice(1) %>
+                                                </span>
+                                            </div>
+                                            <div class="orders-item-date">
+                                                <span class="orders-date-label">Ordered:</span>
+                                                <span class="orders-date-value">
+                                                    <%= new Date(order.createdAt || new Date()).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                                                </span>
+                                            </div>
+                                            <div class="orders-item-total">
+                                                <span class="orders-total-amount">
+                                                    $<%= (order.totalAmount || 0).toFixed(2) %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="orders-item-toggle">
+                                            <button type="button" class="orders-toggle-btn">
+                                                <span class="orders-toggle-icon">▼</span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="orders-item-details" style="display: none;">
+                                        </div>
+                                </div>
+                            <% }); %>
+                        </div>
+                    <% } else { %>
+                        <div class="orders-empty-state">
+                            <div class="orders-empty-icon">📦</div>
+                            <h3 class="orders-empty-title">No Orders Yet</h3>
+                            <p class="orders-empty-message">You haven't placed any orders yet. Start shopping to see your orders here!</p>
+                            <a href="/products" class="orders-empty-btn">Browse Products</a>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </main>
+
+        <footer class="orders-footer">
+            <%- include('../partials/footer') %>
+        </footer>
+    </div>
+
+    <script src="/js/orders.js"></script>
+</body>
+</html>

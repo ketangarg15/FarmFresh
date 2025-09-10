@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - FarmFresh</title>
+    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="/css/navbar.css"> <style>
+/* Navbar always full width */
+header {
+    display: block;
+    width: 100%;
+}
+
+/* Signup form container centered below navbar */
+.auth-container {
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+    header {
+    position: sticky; /* or fixed if you want it always visible */
+    top: 0;
+    z-index: 1000;
+}
+
+.auth-container {
+    margin-top: 80px; /* adjust based on navbar height */
+}
+
+        body {
+            display: flex;
+            flex-direction: column; /* Stacks header and form vertically */
+            min-height: 100vh;
+        }
+
+        .auth-container {
+            flex-grow: 1; /* Allows the container to fill available space */
+            display: flex;
+            align-items: center; /* Vertically centers the card */
+            justify-content: center; /* Horizontally centers the card */
+            padding: 2rem 1rem;
+        }
+    </style>
+</head>
+<body>
+      <%- include('../partials/header') %>
+
+    <%- include('../partials/flash') %>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1 class="auth-title">Create an Account</h1>
+                <p class="auth-subtitle">Join our community of farmers and consumers</p>
+            </div>
+
+            <form class="auth-form" action="/signup" method="POST" id="signupForm">
+                <div class="form-group">
+                    <label class="form-label">I want to join as a...</label>
+                    <div class="role-selection">
+                        <label class="role-option">
+                            <input type="radio" name="role" value="consumer" required checked>
+                            <div class="role-card">
+                                <div class="role-icon">🛒</div>
+                                <div class="role-content">
+                                    <h3>Consumer</h3>
+                                    <p>Buy fresh, local produce</p>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="role-option">
+                            <input type="radio" name="role" value="farmer" required>
+                            <div class="role-card">
+                                <div class="role-icon">🚜</div>
+                                <div class="role-content">
+                                    <h3>Farmer</h3>
+                                    <p>Sell your produce directly</p>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" placeholder="Choose a unique username" required autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email" required autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Create a strong password" required autocomplete="new-password">
+                        <button type="button" class="password-toggle" aria-label="Toggle password visibility">👁️</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="agreeTerms" value="on" required>
+                        I agree to the <a href="/terms" target="_blank" class="auth-link">Terms</a> and <a href="/privacy" target="_blank" class="auth-link">Privacy Policy</a>
+                    </label>
+                </div>
+
+                <button type="submit" class="auth-btn">Create Account</button>
+
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="/login" class="auth-link">Sign in</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/auth.js"></script>
+</body>
+</html>

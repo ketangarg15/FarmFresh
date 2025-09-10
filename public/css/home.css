@@ -1,0 +1,486 @@
+/* ==============================================
+   1. VARIABLES & BASE STYLES
+   ============================================== */
+:root {
+    --accent: #2f8f3f;
+    --muted: #6b7280;
+    --bg: #fafafa;
+    --card: #ffffff;
+    --shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+    --max-width: 1200px;
+    --radius: 10px;
+    --gap: 1rem;
+    --txt: #111827;
+    --txt-hero: #0f5132;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--txt);
+    background: var(--bg);
+    line-height: 1.5;
+}
+
+/* ==============================================
+   2. HEADER & NAVIGATION
+   ============================================== */
+.home-header {
+    width: 100%;
+    background: var(--card);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.home-nav {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0.8rem var(--gap);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.home-nav-brand h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+.home-nav-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.home-nav-link {
+    text-decoration: none;
+    color: var(--muted);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.home-nav-link:hover {
+    background: #f3f4f6;
+    color: var(--txt);
+}
+
+.home-nav-link.active {
+    color: var(--accent);
+}
+
+/* Use :focus-visible for better accessibility */
+.home-nav-link:focus-visible,
+.home-hero-cta:focus-visible,
+.home-product-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+/* ==============================================
+   3. MOBILE NAVIGATION
+   ============================================== */
+.home-nav-toggle {
+    display: none; /* Hidden by default, shown in media query */
+    flex-direction: column;
+    gap: 5px;
+    padding: 6px;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    z-index: 101; /* Above the header */
+}
+
+.home-nav-toggle span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: var(--txt);
+    border-radius: 3px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* "X" transform for the toggle when menu is open */
+.nav-open .home-nav-toggle span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.nav-open .home-nav-toggle span:nth-child(2) {
+    opacity: 0;
+}
+.nav-open .home-nav-toggle span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ==============================================
+   4. HERO SECTION
+   ============================================== */
+.home-hero {
+    width: 100%;
+    text-align: center;
+    padding: 3rem var(--gap);
+    background: linear-gradient(180deg, #f7fff7 0%, #ffffff 100%);
+}
+
+.home-hero-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.home-hero-title {
+    font-size: 2.5rem;
+    margin: 0 0 0.75rem;
+    color: var(--txt-hero);
+    font-weight: 700;
+}
+
+.home-hero-subtitle {
+    margin: 0 0 1.5rem;
+    color: var(--muted);
+    font-size: 1.1rem;
+}
+
+.home-hero-cta {
+    background: var(--accent);
+    color: #fff;
+    border: 0;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(47, 143, 63, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(47, 143, 63, 0.3);
+}
+
+/* ==============================================
+   5. PRODUCTS SECTION
+   ============================================== */
+.home-products {
+    width: 100%;
+    padding: 2rem var(--gap) 4rem;
+}
+
+.home-products-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.home-products-title {
+    font-size: 1.75rem;
+    margin: 0 0 1.5rem;
+    color: var(--txt);
+    text-align: center;
+}
+
+.home-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.home-product-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+}
+
+.home-product-image {
+    width: 100%;
+    height: 200px;
+}
+
+.home-product-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-product-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Allows the button to align to the bottom */
+}
+
+.home-product-name {
+    margin: 0 0 0.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.home-product-price {
+    margin: 0;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+.home-product-desc {
+    margin: 0.5rem 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    flex-grow: 1; /* Pushes button to the bottom */
+}
+
+.home-product-btn {
+    display: inline-block;
+    margin-top: auto; /* Aligns button to the bottom */
+    padding: 0.6rem 1rem;
+    background: var(--txt);
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ==============================================
+   6. FOOTER
+   ============================================== */
+.home-footer {
+    width: 100%;
+    background: var(--card);
+    padding: 2rem var(--gap);
+    border-top: 1px solid #f0f0f0;
+    margin-top: auto;
+}
+
+.home-footer-content {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+/* All styles from your <style> block are placed here */
+.home-product-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+/* ==============================================
+   Base & Layout
+   ============================================== */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+    margin: 0;
+}
+
+.home-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+}
+
+/* ==============================================
+   Hero Section
+   ============================================== */
+.home-hero {
+    background: linear-gradient(180deg, #f7fff7 0%, #ffffff 60%);
+    text-align: center;
+    padding: 4rem 1rem;
+}
+
+.home-hero-title {
+    font-size: 2.5rem;
+    color: #0f5132;
+    margin-bottom: 1rem;
+}
+
+.home-hero-subtitle {
+    font-size: 1.1rem;
+    color: #6b7280;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+}
+
+.home-hero-cta {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    background: #2f8f3f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.home-hero-cta:hover {
+    background: #1f5a2c;
+    transform: translateY(-2px);
+}
+
+/* ==============================================
+   Products Section
+   ============================================== */
+.home-products {
+    padding: 3rem 1rem;
+}
+
+.home-products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.home-products-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.home-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.home-product-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.home-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+}
+
+.home-product-image-link {
+    display: block;
+}
+
+.home-product-image {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+}
+
+.home-product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.home-product-card:hover .home-product-image img {
+    transform: scale(1.05);
+}
+
+.home-product-info {
+    padding: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Makes cards in a row equal height */
+}
+
+.home-product-info h4 {
+    margin: 0 0 0.5rem;
+    font-size: 1.25rem;
+}
+
+.home-product-info .price {
+    font-size: 1.2rem;
+    color: #2f8f3f;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+}
+
+.home-product-info .description {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    flex-grow: 1; /* Pushes button to the bottom */
+}
+
+.home-product-info .btn {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.75rem 1.5rem;
+    background: #2f8f3f;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    align-self: center; /* Centers button if text doesn't fill space */
+}
+.home-product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* ... and all the other styles from your template ... */
+/* ==============================================
+   7. RESPONSIVE DESIGN
+   ============================================== */
+@media (max-width: 768px) {
+    .home-nav-toggle {
+        display: flex; /* Show hamburger on mobile */
+    }
+
+    .home-nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: var(--card);
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: var(--shadow);
+        
+        /* Hidden by default, shown by .nav-open */
+        transform: translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s;
+    }
+
+    .nav-open .home-nav-links {
+        transform: translateY(0);
+        opacity: 1;
+        visibility: visible;
+    }
+}
