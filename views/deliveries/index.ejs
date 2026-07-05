@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Management - FarmFresh Admin</title>
+    <title>Deliveries - FarmFresh</title>
     <link rel="stylesheet" href="/css/deliveries.css">
 </head>
 <body>
-    <%- include('../partials/header') %>
     <%- include('../partials/flash') %>
     
     <div class="deliveries-container">
         <header class="deliveries-header">
             <nav class="deliveries-nav">
                 <div class="deliveries-nav-brand">
-                    <a href="/admin"><h1>FarmFresh Admin</h1></a>
+                    <a href="/"><h1>FarmFresh</h1></a>
                 </div>
                 <ul class="deliveries-nav-links">
-                    <li><a href="/admin/dashboard" class="deliveries-nav-link">Dashboard</a></li>
-                    <li><a href="/admin/orders" class="deliveries-nav-link">Orders</a></li>
-                    <li><a href="/admin/deliveries" class="deliveries-nav-link active">Deliveries</a></li>
+                    <li><a href="/dashboard/<%= currentUser && currentUser.role %>" class="deliveries-nav-link">Dashboard</a></li>
+                    <li><a href="/orders" class="deliveries-nav-link">Orders</a></li>
+                    <li><a href="/deliveries" class="deliveries-nav-link active">Deliveries</a></li>
                     <li><a href="/admin/partners" class="deliveries-nav-link">Partners</a></li>
                     <li><a href="/admin/reports" class="deliveries-nav-link">Reports</a></li>
                     <% if (typeof currentUser !== 'undefined' && currentUser) { %>
@@ -32,9 +31,9 @@
 
         <div class="deliveries-breadcrumb">
             <div class="deliveries-breadcrumb-content">
-                <a href="/admin" class="deliveries-breadcrumb-link">Admin</a>
+                <a href="/" class="deliveries-breadcrumb-link">Home</a>
                 <span class="deliveries-breadcrumb-separator">›</span>
-                <span class="deliveries-breadcrumb-current">Delivery Management</span>
+                <span class="deliveries-breadcrumb-current">Deliveries</span>
             </div>
         </div>
 
@@ -50,7 +49,7 @@
                         <button type="button" class="header-action-btn refresh-btn" id="refreshDeliveries">
                             🔄 Refresh
                         </button>
-                        <a href="/admin/deliveries/assign" class="header-action-btn primary-btn">
+                        <a href="/deliveries/assign" class="header-action-btn primary-btn">
                             ➕ Assign Delivery
                         </a>
                         <button type="button" class="header-action-btn filter-btn" id="filterToggle">
@@ -217,7 +216,7 @@
                                         <tr class="delivery-row" data-delivery-id="<%= delivery._id || delivery.id %>">
                                             
                                             <td class="order-id-cell">
-                                                <a href="/admin/orders/<%= (delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId %>" 
+                                                <a href="/orders/<%= (delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId %>" 
                                                    class="order-link">
                                                     #<%= ((delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId || '').toString().slice(-8).toUpperCase() %>
                                                 </a>
@@ -306,7 +305,7 @@
                                           
                                             <td class="actions-cell">
                                                 <div class="action-buttons">
-                                                    <a href="/admin/deliveries/<%= delivery._id || delivery.id %>" 
+                                                    <a href="/deliveries/<%= delivery._id || delivery.id %>" 
                                                        class="action-btn view-btn" 
                                                        title="View Details">
                                                         👁️
@@ -349,7 +348,7 @@
                                 <div class="empty-icon">📦</div>
                                 <h3 class="empty-title">No Deliveries Found</h3>
                                 <p class="empty-message">There are no delivery assignments to display.</p>
-                                <a href="/admin/deliveries/assign" class="empty-action-btn">
+                                <a href="/deliveries/assign" class="empty-action-btn">
                                     ➕ Assign First Delivery
                                 </a>
                             </div>
@@ -364,7 +363,7 @@
                                         
                                         <div class="card-header">
                                             <div class="card-order-info">
-                                                <a href="/admin/orders/<%= (delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId %>" 
+                                                <a href="/orders/<%= (delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId %>" 
                                                    class="card-order-link">
                                                     Order #<%= ((delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId || '').toString().slice(-8).toUpperCase() %>
                                                 </a>
@@ -451,7 +450,7 @@
                                         </div>
                                         
                                         <div class="card-actions">
-                                            <a href="/admin/deliveries/<%= delivery._id || delivery.id %>" 
+                                            <a href="/deliveries/<%= delivery._id || delivery.id %>" 
                                                class="card-action-btn primary">
                                                 View Details
                                             </a>
@@ -481,7 +480,7 @@
                                 <div class="empty-icon">📦</div>
                                 <h3 class="empty-title">No Deliveries Found</h3>
                                 <p class="empty-message">There are no delivery assignments to display.</p>
-                                <a href="/admin/deliveries/assign" class="empty-action-btn">
+                                <a href="/deliveries/assign" class="empty-action-btn">
                                     ➕ Assign First Delivery
                                 </a>
                             </div>
@@ -554,6 +553,7 @@
             </div>
         </div>
     </div>
-    <script src="/js/deliveries.js"></script>
+    <script src="/js/base.js" defer></script>
+    <script src="/js/deliveries.js" defer></script>
 </body>
 </html>

@@ -30,17 +30,20 @@
                                 <div class="home-product-card">
                                     <a href="/products/<%= product._id %>" class="home-product-image-link">
                                         <div class="home-product-image">
-                                            <img 
-                                                src="<%= product.image ? product.image.url : '/images/placeholder-product.jpg' %>" 
-                                                alt="<%= product.name %>"
-                                                loading="lazy"
-                                            >
+                                           <img 
+  src="<%= (product.image && product.image.url) 
+          ? product.image.url 
+          : (typeof product.image === 'string' 
+              ? product.image 
+              : '/assets/images/apple.jpeg') %>" 
+  alt="<%= product.name %>"
+  loading="lazy"
+>
                                         </div>
                                     </a>
                                     <div class="home-product-info">
                                         <h4><%= product.name %></h4>
                                         <p class="price">₹<%= product.price.toFixed(2) %></p>
-                                        
                                         <p class="description">
                                             <% if (product.description) { %>
                                                 <%= product.description.substring(0, 80) %>...
@@ -61,7 +64,6 @@
         </main>
 
         <%- include('partials/footer') %>
-
     </div>
 
     <script src="/js/home.js" defer></script>

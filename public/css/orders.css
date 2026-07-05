@@ -171,6 +171,14 @@ body {
     background: var(--color-status-success-bg);
     color: var(--color-status-success-text);
 }
+.orders-status-confirmed {
+    background: #cce5ff;
+    color: #004085;
+}
+.orders-status-dispatched {
+    background: #e2e3ff;
+    color: #383d41;
+}
 .orders-status-pending {
     background: var(--color-status-pending-bg);
     color: var(--color-status-pending-text);

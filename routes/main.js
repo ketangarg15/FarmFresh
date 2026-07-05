@@ -4,12 +4,20 @@ const Product = require('../models/product');
 const User = require('../models/user');
 
 // Homepage Route
-router.get('/', async (req, res) => {
-    if (req.isAuthenticated()) {
-        return res.redirect(`/dashboard/${req.user.role}`);
+router.get('/', async (req, res, next) => {
+    try {
+        if (req.isAuthenticated()) {
+            return res.redirect(`/dashboard/${req.user.role}`);
+        }
+        const products = await Product.find({})
+            .sort({ createdAt: -1 })
+            .limit(8)
+            .populate('farmer', 'name');
+            
+        res.render('home', { products, pageTitle: 'Welcome to FarmFresh' });
+    } catch (err) {
+        next(err); // Pass errors to the main error handler
     }
-    const products = await Product.find({}).sort({ createdAt: -1 }).limit(8);
-    res.render('home', { products, pageTitle: 'Welcome to FarmFresh' });
 });
 
 // About Page Route
@@ -18,9 +26,13 @@ router.get('/about', (req, res) => {
 });
 
 // Find Farmers Page Route
-router.get('/farmers', async (req, res) => {
-    const farmers = await User.find({ role: 'farmer' });
-    res.render('farmers', { farmers, pageTitle: 'Meet Our Farmers' });
+router.get('/farmers', async (req, res, next) => {
+    try {
+        const farmers = await User.find({ role: 'farmer' });
+        res.render('farmers', { farmers, pageTitle: 'Meet Our Farmers' });
+    } catch (err) {
+        next(err);
+    }
 });
 
 module.exports = router;

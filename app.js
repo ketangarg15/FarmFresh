@@ -9,6 +9,7 @@ const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const MongoStore = require('connect-mongo');
+const farmerRoutes = require('./routes/farmers');
 
 const dashboardRoutes = require('./routes/dashboard');
 const productRoutes = require('./routes/products');
@@ -31,8 +32,7 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
@@ -52,11 +52,11 @@ app.use(session({
   saveUninitialized: true,
   cookie: {
     httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7
+    maxAge: 1000 * 60 * 60 * 24 * 7,
+    // Add sameSite 'lax' or secure if needed, but standard is fine
   }
 }));
 app.use(flash());
-
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -66,70 +66,38 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user || null;
-  res.locals.messages = {
-    success: req.flash('success'),
-    error: req.flash('error'),
-    warning: req.flash('warning'),
-    info: req.flash('info')
-  };
-  res.locals.currentPath = req.path;
-  res.locals.pageTitle = res.locals.pageTitle || 'FarmFresh';
-  res.locals.additionalCSS = res.locals.additionalCSS || [];
-  res.locals.additionalJS = res.locals.additionalJS || [];
   next();
 });
 
-app.use('/', userRoutes);
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
-app.use('/deliveries', deliveryRoutes);
-app.use('/dashboard', dashboardRoutes);
+// API Routes
+app.use('/api/users', userRoutes);
+app.use('/api/farmers', farmerRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/deliveries', deliveryRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
-app.get('/about', (req, res) => {
-    res.render('about', { pageTitle: 'About Us' });
+// Serve Static Frontend Files
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// SPA Catch-All Route
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
 
-// Find Farmers Page Route
-app.get('/farmers', async (req, res) => {
-    const farmers = await User.find({ role: 'farmer' });
-    res.render('farmers', { farmers, pageTitle: 'Meet Our Farmers' });
-});
 
-app.get('/', async (req, res) => {
-  try {
-    if (req.isAuthenticated()) {
-      return res.redirect(`/dashboard/${req.user.role}`);
-    }
 
-    const products = await Product.find({})
-      .sort({ createdAt: -1 })
-      .limit(8)
-      .select('name price image category')
-      .lean();
 
-    const normalize = (img) => {
-      if (!img) return '/assets/images/placeholder-product.jpg';
-      if (typeof img !== 'string') return '/assets/images/placeholder-product.jpg';
-      if (img.startsWith('http') || img.startsWith('/')) return img;
-      return '/assets/images/' + img;
-    };
 
-    products.forEach(p => {
-      p.image = normalize(p.image);
-    });
 
-    res.render('home', { pageTitle: 'Home', products });
-  } catch (err) {
-    console.error('Home route error:', err);
-    res.render('home', { pageTitle: 'Home', products: [] });
-  }
-});
 
+
+
+// Error Handler
 app.use((err, req, res, next) => {
   const { statusCode = 500 } = err;
-  if (!err.message) err.message = 'Something went wrong';
   console.error(err);
-  res.status(statusCode).render('error', { err, pageTitle: 'Error' });
+  res.status(statusCode).json({ error: err.message || 'Something went wrong' });
 });
 
 const port = process.env.PORT || 3000;

@@ -6,8 +6,8 @@
    Using variables makes the theme easy to change and ensures consistency.
 */
 :root {
-    --color-primary: #6366f1;
-    --color-primary-dark: #8b5cf6;
+    --color-primary: #2f855a;
+    --color-primary-dark: #276749;
     --color-text-dark: #2d3748;
     --color-text-medium: #6b7280;
     --color-text-light: #9ca3af;
@@ -19,8 +19,8 @@
     --radius-sm: 8px;
     --radius-md: 14px;
     --shadow-card: 0 20px 60px rgba(0, 0, 0, 0.1);
-    --shadow-focus: 0 0 0 3px rgba(99, 102, 241, 0.2);
-    --shadow-btn-hover: 0 4px 15px rgba(99, 102, 241, 0.4);
+    --shadow-focus: 0 0 0 3px rgba(47, 133, 90, 0.2);
+    --shadow-btn-hover: 0 4px 15px rgba(47, 133, 90, 0.35);
 }
 
 /* ==============================================
@@ -35,7 +35,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2f855a 0%, #38a169 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -221,7 +221,7 @@ body {
 /* Style the card when its associated radio button is checked */
 .role-option input[type="radio"]:checked + .role-card {
     border-color: var(--color-primary);
-    background: #eef2ff; /* A light primary background */
+    background: #f0fff4; /* Light green background */
     box-shadow: var(--shadow-focus);
 }
 

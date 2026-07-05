@@ -1,4 +1,12 @@
 {
+  "name": "farmfresh",
+  "version": "1.0.0",
+  "description": "Organic Marketplace direct from farms",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "build": "npm install --prefix frontend && npm run build --prefix frontend"
+  },
   "dependencies": {
     "cloudinary": "^1.41.3",
     "connect-flash": "^0.1.1",

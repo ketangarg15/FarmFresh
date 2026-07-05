@@ -3,23 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Details - <%= (delivery._id || delivery.id || '').toString().slice(-8).toUpperCase() %> - FarmFresh Admin</title>
+    <title>Delivery Details - <%= (delivery._id || delivery.id || '').toString().slice(-8).toUpperCase() %> - FarmFresh</title>
     <link rel="stylesheet" href="/css/deliveries.css">
 </head>
 <body>
-    <%- include('../partials/header') %>
     <%- include('../partials/flash') %>
 
     <div class="delivery-show-container">
         <header class="deliveries-header">
             <nav class="deliveries-nav">
                 <div class="deliveries-nav-brand">
-                    <a href="/admin"><h1>FarmFresh Admin</h1></a>
+                    <a href="/"><h1>FarmFresh</h1></a>
                 </div>
                 <ul class="deliveries-nav-links">
-                    <li><a href="/admin/dashboard" class="deliveries-nav-link">Dashboard</a></li>
-                    <li><a href="/admin/orders" class="deliveries-nav-link">Orders</a></li>
-                    <li><a href="/admin/deliveries" class="deliveries-nav-link active">Deliveries</a></li>
+                    <li><a href="/dashboard/<%= currentUser && currentUser.role %>" class="deliveries-nav-link">Dashboard</a></li>
+                    <li><a href="/orders" class="deliveries-nav-link">Orders</a></li>
+                    <li><a href="/deliveries" class="deliveries-nav-link active">Deliveries</a></li>
                     <li><a href="/admin/partners" class="deliveries-nav-link">Partners</a></li>
                     <li><a href="/admin/reports" class="deliveries-nav-link">Reports</a></li>
                     <% if (typeof currentUser !== 'undefined' && currentUser) { %>
@@ -32,9 +31,9 @@
 
         <div class="deliveries-breadcrumb">
             <div class="deliveries-breadcrumb-content">
-                <a href="/admin" class="deliveries-breadcrumb-link">Admin</a>
+                <a href="/" class="deliveries-breadcrumb-link">Home</a>
                 <span class="deliveries-breadcrumb-separator">›</span>
-                <a href="/admin/deliveries" class="deliveries-breadcrumb-link">Deliveries</a>
+                <a href="/deliveries" class="deliveries-breadcrumb-link">Deliveries</a>
                 <span class="deliveries-breadcrumb-separator">›</span>
                 <span class="deliveries-breadcrumb-current">
                     Delivery #<%= (delivery._id || delivery.id || '').toString().slice(-8).toUpperCase() %>
@@ -60,7 +59,7 @@
                     </div>
                         
                     <div class="show-header-actions">
-                        <a href="/admin/deliveries" class="header-action-btn secondary">
+                        <a href="/deliveries" class="header-action-btn secondary">
                             ← Back to Deliveries
                         </a>
                         <button type="button" class="header-action-btn primary" id="updateStatusBtn">
@@ -83,7 +82,7 @@
                             <div class="info-row">
                                 <span class="info-label">Order ID:</span>
                                 <span class="info-value">
-                                    <a href="/admin/orders/<%= (delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId %>" class="order-link">
+                                    <a href="/orders/<%= (delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId %>" class="order-link">
                                         #<%= ((delivery.order && (delivery.order._id || delivery.order.id)) || delivery.orderId || '').toString().slice(-8).toUpperCase() %>
                                     </a>
                                 </span>
@@ -92,7 +91,7 @@
                             <% if (delivery.order && typeof delivery.order.totalAmount !== 'undefined') { %>
                                 <div class="info-row">
                                     <span class="info-label">Order Value:</span>
-                                    <span class="info-value order-amount">$<%= delivery.order.totalAmount.toFixed(2) %></span>
+                                    <span class="info-value order-amount">₹<%= delivery.order.totalAmount.toFixed(2) %></span>
                                 </div>
                             <% } %>
                             
@@ -207,14 +206,13 @@
         </div>
     </div>
     
-    <script src="/js/deliveries.js"></script>
+    <script src="/js/base.js" defer></script>
+    <script src="/js/deliveries.js" defer></script>
     
     <script>
         window.deliveryData = {
             id: '<%= delivery._id || delivery.id %>',
-            // CORRECTED: "assigned" must be in quotes to be a string
             status: '<%= delivery.status || "assigned" %>',
-            // CORRECTED: Completed the line and added a fallback
             orderId: '<%= (delivery.order && (delivery.order._id || delivery.order.id)) || "" %>'
         };
     </script>

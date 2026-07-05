@@ -2,68 +2,100 @@ const Product = require('../models/product');
 const { cloudinary } = require('../config/multer-cloudinary');
 
 module.exports.index = async (req, res) => {
-    const products = await Product.find({}).populate('farmer');
-    res.render('products/index', { products });
-};
-
-module.exports.renderNewForm = (req, res) => {
-    res.render('products/new');
+    try {
+        const products = await Product.find({}).populate('farmer').populate('reviews');
+        const productsWithRatings = products.map(p => {
+            const ratings = p.reviews.map(r => r.rating);
+            const avg = ratings.length ? (ratings.reduce((a, b) => a + b, 0) / ratings.length) : 0;
+            return { ...p.toObject(), averageRating: avg.toFixed(1) };
+        });
+        res.json(productsWithRatings);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };
 
 module.exports.createProduct = async (req, res) => {
-    const product = new Product(req.body.product);
-    // Handle the uploaded file from Multer/Cloudinary
-    if (!req.file) {
-        req.flash('error', 'Product image is required.');
-        return res.redirect('/products/new');
+    try {
+        // Support both nested object format (product[name]) and direct form-data format
+        const productData = req.body.product ? 
+            (typeof req.body.product === 'string' ? JSON.parse(req.body.product) : req.body.product) : 
+            req.body;
+
+        const product = new Product(productData);
+        if (!req.file) {
+            return res.status(400).json({ error: 'Product image is required.' });
+        }
+        product.image = { url: req.file.path, filename: req.file.filename };
+        product.farmer = req.user._id;
+        await product.save();
+        res.status(201).json({ success: true, product });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-    product.image = { url: req.file.path, filename: req.file.filename };
-    product.farmer = req.user._id;
-    await product.save();
-    req.flash('success', 'Product created successfully!');
-    res.redirect(`/products/${product._id}`);
 };
 
 module.exports.showProduct = async (req, res) => {
-    const product = await Product.findById(req.params.id).populate('farmer');
-    if (!product) {
-        req.flash('error', 'Cannot find that product');
-        return res.redirect('/products');
-    }
-    res.render('products/show', { product });
-};
+    try {
+        const product = await Product.findById(req.params.id)
+            .populate({
+                path: "reviews",
+                populate: { path: "author", select: "username" }
+            })
+            .populate('farmer');
 
-module.exports.renderEditForm = async (req, res) => {
-    // isProductAuthor middleware already finds and verifies the product
-    const product = await Product.findById(req.params.id);
-    res.render('products/edit', { product });
+        if (!product) {
+            return res.status(404).json({ error: 'Cannot find that product' });
+        }
+
+        const ratings = product.reviews.map(r => r.rating);
+        const averageRating = ratings.length
+            ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1)
+            : 0;
+
+        res.json({ product, averageRating });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Something went wrong fetching the product' });
+    }
 };
 
 module.exports.updateProduct = async (req, res) => {
-    const { id } = req.params;
-    const product = await Product.findByIdAndUpdate(id, { ...req.body.product });
+    try {
+        const { id } = req.params;
+        const productData = req.body.product ? 
+            (typeof req.body.product === 'string' ? JSON.parse(req.body.product) : req.body.product) : 
+            req.body;
 
-    // If a new image is uploaded, update it and delete the old one
-    if (req.file) {
-        if (product.image && product.image.filename) {
-            await cloudinary.uploader.destroy(product.image.filename);
+        const product = await Product.findByIdAndUpdate(id, { ...productData }, { new: true });
+
+        if (req.file) {
+            if (product.image && product.image.filename) {
+                await cloudinary.uploader.destroy(product.image.filename);
+            }
+            product.image = { url: req.file.path, filename: req.file.filename };
+            await product.save();
         }
-        product.image = { url: req.file.path, filename: req.file.filename };
-        await product.save();
+        
+        res.json({ success: true, product });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-    
-    req.flash('success', 'Product updated successfully!');
-    res.redirect(`/products/${product._id}`);
 };
 
 module.exports.deleteProduct = async (req, res) => {
-    const { id } = req.params;
-    const product = await Product.findById(id);
-    // Delete the image from Cloudinary before deleting the product from DB
-    if (product.image && product.image.filename) {
-        await cloudinary.uploader.destroy(product.image.filename);
+    try {
+        const { id } = req.params;
+        const product = await Product.findById(id);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
+        }
+        if (product.image && product.image.filename) {
+            await cloudinary.uploader.destroy(product.image.filename);
+        }
+        await Product.findByIdAndDelete(id);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(400).json({ error: err.message });
     }
-    await Product.findByIdAndDelete(id);
-    req.flash('success', 'Product deleted successfully.');
-    res.redirect('/products');
 };

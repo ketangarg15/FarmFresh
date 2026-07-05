@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - FarmFresh</title>
-    <link rel="stylesheet" href="/css/dashboard.css">
-</head>
-<body>
-    <%- include('../partials/header') %>
-    <%- include('../partials/flash') %>
+<%- layout('layout') %>
+<%
+    pageTitle = 'Admin Dashboard';
+    additionalCSS = (typeof additionalCSS !== 'undefined' && additionalCSS) || [];
+    additionalJS = (typeof additionalJS !== 'undefined' && additionalJS) || [];
+    additionalCSS.push('/css/dashboard.css');
+    additionalJS.push('/js/dashboard.js');
+%>
 
     <div class="dashboard-container">
         <div class="dashboard-header">
@@ -64,7 +61,7 @@
 
             <div class="dashboard-card stats-card">
                 <div class="card-icon info">💰</div>
-                <span class="stats-number">$12,450</span>
+                <span class="stats-number">₹12,450</span>
                 <div class="stats-label">Platform Revenue</div>
                 <div class="stats-change positive">+22% this month</div>
             </div>
@@ -75,7 +72,7 @@
                 <span class="action-icon">👥</span>
                 Manage Users
             </a>
-            <a href="/admin/orders" class="action-btn">
+            <a href="/orders" class="action-btn">
                 <span class="action-icon">📦</span>
                 View Orders
             </a>
@@ -192,7 +189,7 @@
                 </div>
                 <div class="card-content">
                     <div class="chart-container">
-                        <p>User growth chart placeholder - integrate with Chart.js or similar</p>
+                        <p>User growth chart</p>
                     </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem;">
                         <div style="text-align: center;">
@@ -274,8 +271,3 @@
             </div>
         </div>
     </div>
-    
-    <%- include('../partials/footer') %>
-    <script src="/js/dashboard.js"></script>
-</body>
-</html>

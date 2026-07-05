@@ -8,6 +8,10 @@ const deliverySchema = new Schema({
     required: true
   },
   partnerName: String,
+  deliveryPartner: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
   status: {
     type: String,
     enum: ['pending', 'picked_up', 'in_transit', 'delivered'],

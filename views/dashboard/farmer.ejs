@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farmer Dashboard - FarmFresh</title>
-    <link rel="stylesheet" href="/css/dashboard.css">
-</head>
-<body>
-    <%- include('../partials/header') %>
-    <%- include('../partials/flash') %>
-    
+<%- layout('layout') %>
+<%
+    pageTitle = 'Farmer Dashboard';
+    additionalCSS = (typeof additionalCSS !== 'undefined' && additionalCSS) || [];
+    additionalJS = (typeof additionalJS !== 'undefined' && additionalJS) || [];
+    additionalCSS.push('/css/dashboard.css');
+    additionalJS.push('/js/dashboard.js');
+%>
+
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1 class="dashboard-title">
@@ -55,7 +52,7 @@
 
             <div class="dashboard-card stats-card">
                 <div class="card-icon success">💰</div>
-                <span class="stats-number">$2,450</span>
+                <span class="stats-number">₹2,450</span>
                 <div class="stats-label">This Month's Revenue</div>
                 <div class="stats-change positive">+8% from last month</div>
             </div>
@@ -98,7 +95,7 @@
                                         <div class="list-item-icon">🥬</div>
                                         <div class="list-item-details">
                                             <h4><%= product.name %></h4>
-                                            <p>$<%= product.price %> per <%= product.unit %> • 
+                                            <p>₹<%= product.price %> per <%= product.unit %> • 
                                                <span class="status-badge <%= product.status %>"><%= product.status %></span>
                                             </p>
                                         </div>
@@ -171,7 +168,7 @@
                 </div>
                 <div class="card-content">
                     <div class="chart-container">
-                        <p>Sales chart placeholder - integrate with Chart.js or similar</p>
+                        <p>Sales chart</p>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" style="width: 75%;"></div>
@@ -181,8 +178,3 @@
             </div>
         </div>
     </div>
-
-    <%- include('../partials/footer') %>
-    <script src="/js/dashboard.js"></script>
-</body>
-</html>

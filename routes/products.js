@@ -1,14 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/products');
+const Product = require("../models/product");
+const Review = require("../models/review");
 const { isLoggedIn, isFarmer, isProductAuthor } = require('../middleware');
 const { upload } = require('../config/multer-cloudinary');
 
 // View all products
 router.get('/', productController.index);
-
-// New product form
-router.get('/new', isLoggedIn, isFarmer, productController.renderNewForm);
 
 // Create product (with file upload)
 router.post('/', isLoggedIn, isFarmer, upload.single('image'), productController.createProduct);
@@ -16,13 +15,28 @@ router.post('/', isLoggedIn, isFarmer, upload.single('image'), productController
 // Show one product
 router.get('/:id', productController.showProduct);
 
-// Edit form (protected by authorization)
-router.get('/:id/edit', isLoggedIn, isFarmer, isProductAuthor, productController.renderEditForm);
-
 // Update (with file upload and authorization)
 router.put('/:id', isLoggedIn, isFarmer, isProductAuthor, upload.single('image'), productController.updateProduct);
 
 // Delete (protected by authorization)
 router.delete('/:id', isLoggedIn, isFarmer, isProductAuthor, productController.deleteProduct);
+
+router.post("/:id/reviews", isLoggedIn, async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ error: 'Product not found' });
+    
+    const review = new Review(req.body.review);
+    review.author = req.user._id;
+    await review.save();
+
+    product.reviews.push(review);
+    await product.save();
+
+    res.status(201).json({ success: true, review });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;

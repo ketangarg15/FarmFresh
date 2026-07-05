@@ -104,27 +104,65 @@ body {
 /* ==============================================
    4. BUTTONS
    ============================================== */
+/* ====== Unified Button Styles ====== */
 .products-btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 25px;
-    font-weight: 600;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.2s ease;
-    font-size: 0.9rem;
-    text-align: center;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  color: #fff;
 }
 
+/* View Details Button */
+.products-btn-view {
+  background-color: #2d5016; /* deep green */
+}
+.products-btn-view:hover {
+  background-color: #1f3610;
+  transform: translateY(-2px);
+}
+
+/* Edit Product Button */
+.products-btn-edit {
+  background-color: #6c757d; /* neutral gray */
+}
+.products-btn-edit:hover {
+  background-color: #5a6268;
+  transform: translateY(-2px);
+}
+
+/* Delete Product Button */
+.products-btn-delete {
+  background-color: #dc3545; /* red for delete */
+}
+.products-btn-delete:hover {
+  background-color: #b02a37;
+  transform: translateY(-2px);
+}
+
+/* Optional: Add subtle shadow for all */
+.products-btn:not(:disabled) {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
 .products-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
-.products-btn-view { background: var(--color-primary); color: var(--color-text-inverse); }
-.products-btn-view:hover { background: var(--color-primary-dark); }
-.products-btn-order { background: var(--color-accent); color: var(--color-text-inverse); }
-.products-btn-order:hover { background: var(--color-accent-dark); }
-.products-btn-disabled { background: #ccc; color: #666; cursor: not-allowed; }
+/* Disabled state */
+.products-btn:disabled,
+.products-btn-disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
 
 /* ==============================================
    5. PRODUCTS GRID & CARDS
@@ -195,7 +233,15 @@ body {
     font-weight: 700;
     margin-bottom: 1rem;
 }
+/* Add this to your existing .products-btn rules */
+.products-btn-edit {
+    background-color: #6c757d; /* A neutral secondary color */
+    color: #fff;
+}
 
+.products-btn-edit:hover {
+    background-color: #5a6268;
+}
 .products-card-actions {
     display: flex;
     gap: 0.75rem;
@@ -253,4 +299,43 @@ body {
     .products-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+}
+/* ====== Discount Price Styles ====== */
+.products-card-price {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: 0.5rem;
+}
+
+.old-price {
+    text-decoration: line-through;
+    color: #888;
+    margin-right: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.discounted-price {
+    color: var(--color-accent);
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.discount-badge {
+    color: #28a745;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-left: 0.4rem;
+}
+.products-discount-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff3e3e;
+  color: #fff;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }

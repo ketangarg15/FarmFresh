@@ -2,31 +2,27 @@ const Product = require('./models/product');
 
 module.exports.isLoggedIn = (req, res, next) => {
     if (!req.isAuthenticated()) {
-        req.flash('error', 'You must be signed in first!');
-        return res.redirect('/login');
+        return res.status(401).json({ error: 'You must be signed in first!' });
     }
     next();
 };
 
 module.exports.isFarmer = (req, res, next) => {
-    if (req.user.role !== 'farmer') {
-        req.flash('error', 'You do not have permission to do that.');
-        return res.redirect('/products');
+    if (!req.user || req.user.role !== 'farmer') {
+        return res.status(403).json({ error: 'You do not have permission to do that. Farmers only.' });
     }
     next();
 };
 
-// NEW: Authorization middleware to check product ownership
+// Authorization middleware to check product ownership
 module.exports.isProductAuthor = async (req, res, next) => {
     const { id } = req.params;
     const product = await Product.findById(id);
     if (!product) {
-        req.flash('error', 'Cannot find that product.');
-        return res.redirect('/products');
+        return res.status(404).json({ error: 'Cannot find that product.' });
     }
-    if (!product.farmer.equals(req.user._id)) {
-        req.flash('error', 'You do not have permission to do that.');
-        return res.redirect(`/products/${id}`);
+    if (!req.user || !product.farmer.equals(req.user._id)) {
+        return res.status(403).json({ error: 'You do not have permission to do that.' });
     }
     next();
 }

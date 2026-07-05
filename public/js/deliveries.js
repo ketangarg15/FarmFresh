@@ -8,6 +8,7 @@ function initializeDeliveryManagement() {
     const deliveriesTable = document.getElementById('deliveriesTable');
     const cardsContainer = document.getElementById('cardsView');
     const statusUpdateModal = document.getElementById('statusUpdateModal');
+    const updateStatusBtn = document.getElementById('updateStatusBtn');
     let isSubmitting = false; // Prevents duplicate form submissions.
 
     // Use a centralized notification utility if available.
@@ -37,7 +38,7 @@ function initializeDeliveryManagement() {
     function hideStatusUpdateModal() {
         if (!statusUpdateModal) return;
         statusUpdateModal.style.display = 'none';
-        statusUpdateModal.querySelector('#statusUpdateForm')?.reset();
+        (statusUpdateModal.querySelector('#statusUpdateForm') || statusUpdateModal.querySelector('#deliveryStatusForm'))?.reset();
     }
 
     /**
@@ -48,8 +49,10 @@ function initializeDeliveryManagement() {
         if (isSubmitting) return;
 
         const form = event.target;
-        const deliveryId = form.querySelector('#updateDeliveryId').value;
-        const status = form.querySelector('#newStatus').value;
+        const idInput = form.querySelector('#updateDeliveryId');
+        const statusInput = form.querySelector('#newStatus') || form.querySelector('#deliveryStatus');
+        const deliveryId = (idInput && idInput.value) || (window.deliveryData && window.deliveryData.id) || (document.querySelector('[data-delivery-id]') && document.querySelector('[data-delivery-id]').dataset.deliveryId);
+        const status = statusInput && statusInput.value;
         const submitBtn = form.querySelector('#updateStatusSubmit');
         const originalBtnText = submitBtn.textContent;
 
@@ -76,16 +79,17 @@ function initializeDeliveryManagement() {
      * A placeholder for the actual API call to update delivery status.
      */
     async function updateDeliveryAPI(deliveryId, data) {
-        // In a real app, this would be a fetch call.
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                if (deliveryId) {
-                    resolve({ success: true, status: data.status });
-                } else {
-                    reject(new Error("Invalid delivery ID."));
-                }
-            }, 500);
+        const response = await fetch(`/deliveries/${deliveryId}?_method=PUT`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
         });
+        if (!response.ok) {
+            let message = 'Failed to update status.';
+            try { const json = await response.json(); message = json.message || message; } catch (_) {}
+            throw new Error(message);
+        }
+        return response.json().catch(() => ({ success: true, status: data.status }));
     }
 
     /**
@@ -134,6 +138,14 @@ function initializeDeliveryManagement() {
             }
         });
         document.getElementById('statusUpdateForm')?.addEventListener('submit', handleStatusUpdateSubmit);
+        document.getElementById('deliveryStatusForm')?.addEventListener('submit', handleStatusUpdateSubmit);
+
+        // Show page button support
+        updateStatusBtn?.addEventListener('click', function(){
+            const id = (window.deliveryData && window.deliveryData.id) || (document.querySelector('[data-delivery-id]') && document.querySelector('[data-delivery-id]').dataset.deliveryId);
+            const current = (window.deliveryData && window.deliveryData.status) || (document.querySelector('[data-delivery-id]') && document.querySelector('[data-delivery-id]').dataset.status) || 'assigned';
+            showStatusUpdateModal(id, current);
+        });
     }
 
     // Initialize everything.

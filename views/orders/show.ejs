@@ -156,11 +156,15 @@
                                     %>
                                     <div class="receipt-item">
                                         <div class="receipt-item-image">
-                                            <img 
-                                                src="<%= (item.product && (item.product.image || item.product.imageUrl)) || '/images/placeholder-product.jpg' %>" 
-                                                alt="<%= (item.product && item.product.name) || 'Product' %>"
-                                                class="receipt-product-img"
-                                            >
+                                         <img 
+  src="<%= (item.product && item.product.image && item.product.image.url) 
+          ? item.product.image.url 
+          : (item.product && typeof item.product.image === 'string' 
+              ? item.product.image 
+              : '/assets/images/apple.jpeg') %>" 
+  alt="<%= (item.product && item.product.name) || 'Product' %>"
+  class="receipt-product-img"
+/>
                                         </div>
                                         
                                         <div class="receipt-item-details">
@@ -201,12 +205,12 @@
                                                 <span class="quantity-value"><%= itemQuantity %></span>
                                             </div>
                                             <div class="price-section">
-                                                <span class="unit-price">$<%= itemPrice.toFixed(2) %> each</span>
+                                                <span class="unit-price">₹<%= itemPrice.toFixed(2) %> each</span>
                                             </div>
                                         </div>
                                         
                                         <div class="receipt-item-total">
-                                            $<%= itemTotal.toFixed(2) %>
+                                           ₹ <%= itemTotal.toFixed(2) %>
                                         </div>
                                     </div>
                                 <% }); %>
@@ -214,7 +218,7 @@
                                 <div class="receipt-summary">
                                     <div class="summary-row">
                                         <span class="summary-label">Subtotal:</span>
-                                        <span class="summary-value">$<%= subtotal.toFixed(2) %></span>
+                                        <span class="summary-value">₹<%= subtotal.toFixed(2) %></span>
                                     </div>
                                     
                                     <% 
@@ -225,25 +229,28 @@
                                     
                                     <div class="summary-row">
                                         <span class="summary-label">Delivery Fee:</span>
-                                        <span class="summary-value">$<%= deliveryFee.toFixed(2) %></span>
+                                        <span class="summary-value">₹<%= deliveryFee.toFixed(2) %></span>
                                     </div>
                                     
                                     <div class="summary-row">
                                         <span class="summary-label">Tax:</span>
-                                        <span class="summary-value">$<%= tax.toFixed(2) %></span>
+                                        <span class="summary-value">₹<%= tax.toFixed(2) %></span>
                                     </div>
                                     
                                     <% if (discount > 0) { %>
                                         <div class="summary-row summary-discount">
                                             <span class="summary-label">Discount:</span>
-                                            <span class="summary-value">-$<%= discount.toFixed(2) %></span>
+                                            <span class="summary-value">-₹<%= discount.toFixed(2) %></span>
                                         </div>
                                     <% } %>
-                                    
-                                    <div class="summary-row summary-total">
-                                        <span class="summary-label">Total:</span>
-                                        <span class="summary-value">$<%= (order.totalAmount || 0).toFixed(2) %></span>
-                                    </div>
+                                    <%
+    const grandTotal = (subtotal + deliveryFee + tax - discount);
+%>
+<div class="summary-row summary-total">
+    <span class="summary-label">Total:</span>
+    <span class="summary-value">₹<%= grandTotal.toFixed(2) %></span>
+</div>
+
                                 </div>
                             <% } else { %>
                                 <div class="receipt-items-empty">
@@ -382,17 +389,11 @@
                                 <% farmers.forEach(function(farmer) { %>
                                     <div class="farmer-contact-card">
                                         <div class="farmer-info">
-                                            <% if (farmer.profileImage || farmer.avatar) { %>
+                                           
                                                 <img 
-                                                    src="<%= farmer.profileImage || farmer.avatar %>" 
-                                                    alt="<%= farmer.name || farmer.firstName + ' ' + (farmer.lastName || '') %>"
+                                                    src="/assets/images/farmerpic.jpg" 
                                                     class="farmer-avatar"
                                                 >
-                                            <% } else { %>
-                                                <div class="farmer-avatar-placeholder">
-                                                    <%= ((farmer.name || farmer.firstName || 'F').charAt(0)).toUpperCase() %>
-                                                </div>
-                                            <% } %>
                                             
                                             <div class="farmer-details">
                                                 <h4 class="farmer-name">
@@ -459,9 +460,9 @@
                             🔄 Reorder Items
                         </button>
                         
-                        <a href="/orders/<%= order._id || order.id %>/receipt.pdf" class="order-action-btn order-action-download" target="_blank">
-                            📄 Download PDF
-                        </a>
+                        <button type="button" class="order-action-btn order-action-print" style="background-color: rgb(102, 102, 28);" onclick="window.print()">
+                            Download PDF
+                        </button>
                         
                         <% if ((order.status || 'pending').toLowerCase() === 'delivered') { %>
                             <a href="/orders/<%= order._id || order.id %>/review" class="order-action-btn order-action-review">
@@ -486,7 +487,7 @@
             </div>
         </footer>
     </div>
-
-    <script src="/js/order-show.js"></script>
+    <script src="/js/base.js" defer></script>
+    <script src="/js/order-show.js" defer></script>
 </body>
 </html>

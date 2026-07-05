@@ -1,15 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consumer Dashboard - FarmFresh</title>
-    <link rel="stylesheet" href="/css/dashboard.css">
-</head>
-<body>
-    <%- include('../partials/header') %>
-    <%- include('../partials/flash') %>
-    
+<%- layout('layout') %>
+<%
+    pageTitle = 'Consumer Dashboard';
+    additionalCSS = (typeof additionalCSS !== 'undefined' && additionalCSS) || [];
+    additionalJS = (typeof additionalJS !== 'undefined' && additionalJS) || [];
+    additionalCSS.push('/css/dashboard.css');
+    additionalJS.push('/js/dashboard.js');
+%>
+
     <div class="dashboard-container">
         <div class="dashboard-header">
             <h1 class="dashboard-title">
@@ -55,7 +52,7 @@
               
             <div class="dashboard-card stats-card">
                 <div class="card-icon info">💰</div>
-                <span class="stats-number">$156</span>
+                <span class="stats-number">₹156</span>
                 <div class="stats-label">Money Saved</div>
                 <div class="stats-change positive">vs. grocery stores</div>
             </div>
@@ -70,7 +67,7 @@
                 <span class="action-icon">📦</span>
                 My Orders
             </a>
-            <a href="/saved" class="action-btn">
+            <a href="/orders" class="action-btn">
                 <span class="action-icon">❤️</span>
                 Saved Items
             </a>
@@ -149,7 +146,7 @@
                         </ul>
                         <% if (savedItems.length > 5) { %>
                             <p style="text-align: center; margin-top: 1rem; color: #718096;">
-                                <a href="/saved" class="list-item-action">View all saved items</a>
+                                <a href="/orders" class="list-item-action">View all saved items</a>
                             </p>
                         <% } %>
                     <% } else { %>
@@ -199,8 +196,3 @@
             </div>
         </div>
     </div>
-    
-    <%- include('../partials/footer') %>
-    <script src="/js/dashboard.js"></script>
-</body>
-</html>

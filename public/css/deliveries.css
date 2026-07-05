@@ -212,6 +212,22 @@ body {
     box-shadow: var(--shadow-focus);
 }
 
+/* Unified status badges */
+.status-badge,
+.card-status-badge {
+    display: inline-block;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.status-assigned { background: #e2e3ff; color: #383d41; }
+.status-picked-up { background: #cce5ff; color: #004085; }
+.status-in-transit { background: #fff3cd; color: #856404; }
+.status-delivered { background: #d4edda; color: #155724; }
+.status-failed { background: #f8d7da; color: #721c24; }
+.status-returned { background: #fefefe; color: #333; border: 1px solid #e9ecef; }
+
 /* Universal selector for reduced motion */
 @media (prefers-reduced-motion: reduce) {
     *,
