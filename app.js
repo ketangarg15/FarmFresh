@@ -19,7 +19,7 @@ const User = require('./models/user');
 
 const app = express();
 
-const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/farmers-market';
+const dbUrl = process.env.DB_URL;
 mongoose.connect(dbUrl);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Mongo connection error:'));
