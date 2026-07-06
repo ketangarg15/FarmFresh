@@ -26,7 +26,10 @@ router.post("/:id/reviews", isLoggedIn, async (req, res, next) => {
     const product = await Product.findById(req.params.id);
     if (!product) return res.status(404).json({ error: 'Product not found' });
     
-    const review = new Review(req.body.review);
+    const review = new Review({
+      rating: req.body.review.rating,
+      comment: req.body.review.text || req.body.review.comment
+    });
     review.author = req.user._id;
     await review.save();
 

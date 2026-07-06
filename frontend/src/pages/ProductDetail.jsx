@@ -263,7 +263,7 @@ export default function ProductDetail({ user, showToast, onAddToCart }) {
                     ))}
                   </div>
                 </div>
-                <p style={{ color: 'var(--text-dark)', fontSize: '0.95rem', margin: 0 }}>{review.text}</p>
+                <p style={{ color: 'var(--text-dark)', fontSize: '0.95rem', margin: 0 }}>{review.comment || review.text}</p>
               </div>
             ))}
           </div>
