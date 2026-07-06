@@ -66,9 +66,13 @@ export default function Cart({ cart, onRemove, onUpdateQuantity, onCheckout, sho
             {cart.map((item, idx) => (
               <div key={idx} style={{ display: 'flex', gap: '16px', alignItems: 'center', paddingBottom: '20px', borderBottom: idx < cart.length - 1 ? '1px solid var(--border-color)' : 'none' }}>
                 <img 
-                  src={item.image || 'https://images.unsplash.com/photo-1610348725531-843dff10902c?auto=format&fit=crop&w=600&q=80'} 
+                  src={item.image?.url || item.image || 'https://images.unsplash.com/photo-1610348725531-843dff10902c?auto=format&fit=crop&w=600&q=80'} 
                   alt={item.name} 
                   style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '8px', border: '1px solid var(--border-color)' }}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://images.unsplash.com/photo-1610348725531-843dff10902c?auto=format&fit=crop&w=600&q=80';
+                  }}
                 />
                 
                 <div style={{ flexGrow: 1 }}>
@@ -99,39 +103,42 @@ export default function Cart({ cart, onRemove, onUpdateQuantity, onCheckout, sho
             
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '0.95rem', color: 'var(--text-muted)' }}>
               <span>Items Total:</span>
-              <span>₹{total.toFixed(2)}</span>
+              <span style={{ color: 'var(--text-dark)', fontWeight: 600 }}>₹{total.toFixed(2)}</span>
             </div>
             
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontSize: '0.95rem', color: 'var(--text-muted)' }}>
               <span>Delivery Charges:</span>
               <span style={{ color: 'var(--primary-hover)', fontWeight: 'bold' }}>FREE</span>
             </div>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginTop: '16px', marginBottom: '24px' }}>
-              <span style={{ fontWeight: 600, color: 'var(--primary-color)' }}>Grand Total:</span>
-              <strong style={{ fontSize: '1.5rem', color: 'var(--primary-color)' }}>₹{total.toFixed(2)}</strong>
-            </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.8rem', color: 'var(--text-muted)', backgroundColor: 'var(--bg-light)', padding: '10px', borderRadius: '8px', marginBottom: '20px', border: '1px solid var(--border-color)' }}>
-              <ShieldCheck size={16} style={{ color: 'var(--primary-hover)' }} /> Complete security guarantee.
+            <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginTop: '16px', marginBottom: '24px' }}>
+              <span style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-dark)' }}>Total Payable:</span>
+              <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--primary-color)' }}>₹{total.toFixed(2)}</span>
             </div>
 
             <button 
               onClick={handleCheckoutClick}
-              className="btn btn-primary"
-              style={{ width: '100%', padding: '14px', borderRadius: '12px' }}
+              className="btn btn-primary" 
+              style={{ width: '100%', padding: '14px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
             >
-              Place Order & Pay
+              <ShoppingBag size={18} /> Proceed to Checkout
             </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center', marginTop: '16px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+              <ShieldCheck size={16} style={{ color: 'var(--primary-color)' }} />
+              <span>Simulated Secured SSL Checkout Gateway</span>
+            </div>
           </div>
         </div>
       )}
 
+      {/* Checkout Modal */}
       {showPayment && (
         <PaymentModal 
-          amount={total} 
-          onClose={() => setShowPayment(false)} 
-          onSuccess={handlePaymentSuccess} 
+          isOpen={showPayment}
+          onClose={() => setShowPayment(false)}
+          onSuccess={handlePaymentSuccess}
+          amount={total}
         />
       )}
     </div>
