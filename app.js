@@ -2,10 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
-const ejsMate = require('ejs-mate');
 const session = require('express-session');
 const flash = require('connect-flash');
-const methodOverride = require('method-override');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const MongoStore = require('connect-mongo');
@@ -18,7 +16,6 @@ const deliveryRoutes = require('./routes/deliveries');
 const userRoutes = require('./routes/users');
 
 const User = require('./models/user');
-const Product = require('./models/product');
 
 const app = express();
 
@@ -28,13 +25,8 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Mongo connection error:'));
 db.once('open', () => console.log('MongoDB connected'));
 
-app.engine('ejs', ejsMate);
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(methodOverride('_method'));
 
 const secret = process.env.SESSION_SECRET || 'thisshouldbeabettersecret';
 const store = MongoStore.create({
@@ -53,7 +45,6 @@ app.use(session({
   cookie: {
     httpOnly: true,
     maxAge: 1000 * 60 * 60 * 24 * 7,
-    // Add sameSite 'lax' or secure if needed, but standard is fine
   }
 }));
 app.use(flash());
@@ -84,14 +75,6 @@ app.use(express.static(path.join(__dirname, 'frontend/dist')));
 app.get(/^(?!\/api).*/, (req, res) => {
   res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
-
-
-
-
-
-
-
-
 
 // Error Handler
 app.use((err, req, res, next) => {
